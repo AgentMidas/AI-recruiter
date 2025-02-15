@@ -1,0 +1,47 @@
+import ollama
+
+# Define the AI model to use
+model = "llama3.2"
+
+def analyze_resume(resume_text):
+    """
+    Analyze a resume using the AI model.
+    """
+    prompt = f"Analyze the following resume and extract key skills, experiences, and qualifications:\n\n{resume_text}"
+    response = ollama.generate(model=model, prompt=prompt)
+    return response['response']
+
+def match_candidate(job_description, candidate_profile):
+    """
+    Match a candidate profile to a job description.
+    """
+    prompt = f"Match the following candidate profile to the job description:\n\nJob Description:\n{job_description}\n\nCandidate Profile:\n{candidate_profile}"
+    response = ollama.generate(model=model, prompt=prompt)
+    return response['response']
+
+def main():
+    # Path to the resume file
+    resume_file = "humko.txt"
+
+    try:
+        # Read the resume content
+        with open(resume_file, "r", encoding="utf-8") as file:
+            resume_text = file.read().strip()
+
+        job_description = "We are looking for a software developer with experience in Python and web technologies."
+
+        # Analyze the resume
+        analysis = analyze_resume(resume_text)
+        print("Resume Analysis:\n", analysis)
+
+        # Match candidate to job description
+        match_result = match_candidate(job_description, resume_text)
+        print("\nCandidate Match Result:\n", match_result)
+
+    except FileNotFoundError:
+        print(f"Error: The file '{resume_file}' was not found.")
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+
+if __name__ == "__main__":
+    main()
